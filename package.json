@@ -1,5 +1,5 @@
 {
-  "name": "aws-lambda-function-terraform-template",
+  "name": "aws-lambda-terraform-example",
   "version": "1.0.0",
   "description": "A sample project with a template structure to speed up creating, testing, and publishing a lambda function using terraform.",
   "main": "app.js",
