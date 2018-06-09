@@ -7,17 +7,15 @@
     "test": "npm run test-node",
     "test-node": "mocha --recursive ./test",
     "build": "gulp build-package",
+    "deploy-plan": "gulp terraform-plan",
     "deploy": "gulp deploy",
-    "deploy-validate": "gulp deploy-validate",
-    "deploy-build": "gulp deploy-build",
-    "destroy": "gulp destroy"
+    "destroy": "gulp terraform-destroy"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jamesgawn/aws-lambda-function-terraform-template.git"
   },
   "dependencies": {
-    "alexa-sdk": "^1.0.18",
     "bunyan": "^1.8.12"
   },
   "devDependencies": {

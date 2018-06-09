@@ -11,7 +11,7 @@ If this initialises successfully you will be able to build & deploy the lambda f
 
 Command | Description
 --- | ----
-npm run build | This will build the packaged code in the form of a zip file that can be deployed as a lambda function
-npm run deploy-validate | This will run the terraform validation process to inform you what will change
-npm run deploy | This will build & deploy (via terraform) the lambda function
-npm run destroy | This will remove the lambda function from AWS
+npm run build | This will build the packaged code in the form of a zip file that can be deployed as a lambda function.
+npm run deploy-plan | This will provide a preview of the changes that terraform will make upon a deployment.
+npm run deploy | This will build & deploy (via terraform) the lambda function.
+npm run destroy | This will remove the lambda function from AWS.

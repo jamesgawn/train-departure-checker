@@ -41,16 +41,22 @@ gulp.task('build-package', function(callback) {
 	);
 });
 
-gulp.task('deploy-validate', () => terraform.validate());
+gulp.task('terraform-plan', () => terraform.plan());
 
-gulp.task('deploy', () => terraform.apply());
+gulp.task('terraform-validate', () => terraform.validate());
 
-gulp.task('destroy', () => terraform.destroy());
+gulp.task('terraform-deploy', () => terraform.apply("./",{
+	args: {
+		"auto-approve": true
+	}
+}));
 
-gulp.task('deploy-build', function(callback) {
+gulp.task('terraform-destroy', () => terraform.destroy());
+
+gulp.task('deploy', function(callback) {
 	return runSequence(
 		['build-package'],
-		['deploy'],
+		['terraform-deploy'],
 		callback
 	);
 });
