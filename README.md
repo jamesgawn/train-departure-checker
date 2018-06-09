@@ -9,9 +9,9 @@ terraform init -backend-config="profile=default"
 
 If this initialises successfully you will be able to build & deploy the lambda function using the following set of commands:
 
-|| Command || Description ||
-| --- | ---- |
-| npm run build | This will build the packaged code in the form of a zip file that can be deployed as a lambda function |
-| npm run deploy-validate | This will run the terraform validation process to inform you what will change |
-| npm run deploy | This will build & deploy (via terraform) the lambda function |
-| npm run destroy | This will remove the lambda function from AWS |
+Command | Description
+--- | ----
+npm run build | This will build the packaged code in the form of a zip file that can be deployed as a lambda function
+npm run deploy-validate | This will run the terraform validation process to inform you what will change
+npm run deploy | This will build & deploy (via terraform) the lambda function
+npm run destroy | This will remove the lambda function from AWS
