@@ -1,5 +1,5 @@
-# AWS Lambda Javascript Example
-A sample project with a example structure to speed up creating, testing, and publishing a lambda function using terraform.
+# AWS Lambda Terraform Example
+A simple set of restful APIs to retrieve train departure information from national rail.
 
 You will need to initialise the terraform state, which is stored by default in an S3 bucket, using your AWS credentials. This example project sources the credentials from a shared credentials file as described on with [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html).
 

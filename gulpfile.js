@@ -51,7 +51,11 @@ gulp.task('terraform-deploy', () => terraform.apply("./",{
 	}
 }));
 
-gulp.task('terraform-destroy', () => terraform.destroy());
+gulp.task('terraform-destroy', () => terraform.destroy("./",{
+	args: {
+		"auto-approve": true
+	}
+}));
 
 gulp.task('deploy', function(callback) {
 	return runSequence(

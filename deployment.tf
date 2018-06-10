@@ -16,7 +16,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "ana-terraform-state-prod"
-    key = "aws-lambda-function-terraform-example/terraform.tfstate"
+    key = "train-departure-checker/terraform.tfstate"
     region = "eu-west-2"
   }
 }

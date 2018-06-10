@@ -1,8 +1,8 @@
 {
-  "name": "aws-lambda-terraform-example",
+  "name": "train-departure-checker",
   "version": "1.0.0",
-  "description": "A sample project with a template structure to speed up creating, testing, and publishing a lambda function using terraform.",
-  "main": "app.js",
+  "description": "A rest API that makes available train departure information from the national rail using lambda and API gateway.",
+  "main": "lambda.js",
   "scripts": {
     "test": "npm run test-node",
     "test-node": "mocha --recursive ./test",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamesgawn/aws-lambda-function-terraform-template.git"
+    "url": "git+https://github.com/jamesgawn/train-departure-checker.git"
   },
   "dependencies": {
     "bunyan": "^1.8.12"
@@ -33,7 +33,7 @@
   "author": "James Gawn",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jamesgawn/aws-lambda-function-terraform-template/issues"
+    "url": "https://github.com/jamesgawn/train-departure-checker/issues"
   },
-  "homepage": "https://github.com/jamesgawn/aws-lambda-function-terraform-template#readme"
+  "homepage": "https://github.com/jamesgawn/train-departure-checker#readme"
 }
