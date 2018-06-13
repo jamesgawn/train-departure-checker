@@ -1,0 +1,26 @@
+[
+    {
+        "crsCode": "ABE",
+        "name": "Aber",
+        "latitude": "51.57496069",
+        "longitude": "-3.229838935"
+    },
+    {
+        "crsCode": "ACY",
+        "name": "Abercynon",
+        "latitude": "51.644706",
+        "longitude": "-3.327000754"
+    },
+    {
+        "crsCode": "ABA",
+        "name": "Aberdare",
+        "latitude": "51.71505747",
+        "longitude": "-3.443099147"
+    },
+    {
+        "crsCode": "AVY",
+        "name": "Aberdovey",
+        "latitude": "52.54397223",
+        "longitude": "-4.057080835"
+    }
+]

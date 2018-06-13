@@ -8,6 +8,22 @@ variable "region" {
   default = "eu-west-2"
 }
 
+variable "nrdp_user" {
+  type = "string"
+}
+
+variable "nrdp_pass" {
+  type = "string"
+}
+
+variable "darwin_token" {
+  type = "string"
+}
+
+variable "s3_bucket_name" {
+  type = "string"
+}
+
 provider "aws" {
   region = "${var.region}"
   profile = "${var.profile}"
@@ -21,37 +37,86 @@ terraform {
   }
 }
 
-resource "aws_lambda_function" "example" {
-  function_name = "LambdaExample"
+resource "aws_lambda_function" "rail_station_retrieval_lambda" {
+  function_name = "rail-station-retrevial"
 
   # "main" is the filename within the zip file (main.js) and "handler"
   # is the name of the property under which the handler function was
   # exported in that file.
-  handler = "lambda.handler"
+  handler = "station-lambda.handler"
   runtime = "nodejs8.10"
   filename = "dist-lambda.zip"
+  memory_size = 512
+  timeout = 90
+  environment {
+    variables {
+      NRDP_USER = "${var.nrdp_user}",
+      NRDP_PASS = "${var.nrdp_pass}"
+    }
+  }
 
-  role = "${aws_iam_role.lambda_exec.arn}"
+  role = "${aws_iam_role.lambda_execution_role.arn}"
+}
+
+data "aws_iam_policy_document" "lambda_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
 }
 
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
-resource "aws_iam_role" "lambda_exec" {
-  name = "lambda_example_execution_role"
+resource "aws_iam_role" "lambda_execution_role" {
+  name = "rail-lambda-execution-role"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
 }
-EOF
+
+data "aws_iam_policy_document" "cloudwatch-log-group-lambda" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "lambda-cloudwatch-log-group" {
+  name = "rail-lambda-cloudwatch-log-group"
+  role = "${aws_iam_role.lambda_execution_role.name}"
+  policy = "${data.aws_iam_policy_document.cloudwatch-log-group-lambda.json}"
+}
+
+data "aws_iam_policy_document" "rail_s3_bucket_access_iam_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ]
+    resources = [
+      "${aws_s3_bucket.rail_bucket.arn}",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "rail_s3_bucket_access_iam_role_policy" {
+  name = "rail_s3_bucket_access"
+  role = "${aws_iam_role.lambda_execution_role.name}"
+  policy = "${data.aws_iam_policy_document.rail_s3_bucket_access_iam_policy_document.json}"
+}
+
+resource "aws_s3_bucket" "rail_bucket" {
+  bucket = "${var.s3_bucket_name}"
+  acl = "private"
 }

@@ -21,7 +21,7 @@ gulp.task('build-node-mods', function() {
 });
 
 gulp.task('build-copy-lambda', function() {
-	return gulp.src('lambda.js')
+	return gulp.src('*-lambda.js')
 		.pipe(gulp.dest('dist/'));
 });
 
@@ -41,17 +41,30 @@ gulp.task('build-package', function(callback) {
 	);
 });
 
-gulp.task('terraform-plan', () => terraform.plan());
+let terraform_vars = {
+	nrdp_user: process.env['NRDP_USER'],
+		nrdp_pass: process.env['NRDP_PASS'],
+		darwin_token: process.env['DARWIN_TOKEN'],
+		s3_bucket_name: process.env['S3_BUCKET_NAME']
+};
 
-gulp.task('terraform-validate', () => terraform.validate());
+gulp.task('terraform-plan', () => terraform.plan("./", {
+	vars: terraform_vars
+}));
+
+gulp.task('terraform-validate', () => terraform.validate("./", {
+	vars: terraform_vars
+}));
 
 gulp.task('terraform-deploy', () => terraform.apply("./",{
+	vars: terraform_vars,
 	args: {
 		"auto-approve": true
 	}
 }));
 
 gulp.task('terraform-destroy', () => terraform.destroy("./",{
+	vars: terraform_vars,
 	args: {
 		"auto-approve": true
 	}

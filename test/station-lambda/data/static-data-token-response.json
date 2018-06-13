@@ -1,0 +1,9 @@
+{
+    "username": "alice@noone.com",
+    "roles": {
+        "Role(id=3982c9f4-3067-11e7-ab3e-06fe8c81b23d, name='ROLE_KB_USER')": true,
+        "Role(id=723f3ec0-c8a5-11e4-b504-06fe8c81b23d, name='ROLE_D3_USER')": true,
+        "Role(id=2eba6bb8-3c06-11e6-ab3e-06fe8c81b23d, name='ROLE_HSP_USER')": true
+    },
+    "token": "alice@noone.com:1528708426871:837a028e104dbf3534ca0f8ab2f09"
+}
