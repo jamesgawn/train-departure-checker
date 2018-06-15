@@ -69,8 +69,6 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
   }
 }
 
-# IAM role which dictates what other AWS services the Lambda function
-# may access.
 resource "aws_iam_role" "lambda_execution_role" {
   name = "rail-lambda-execution-role"
 
@@ -102,10 +100,33 @@ data "aws_iam_policy_document" "rail_s3_bucket_access_iam_policy_document" {
     effect = "Allow"
     actions = [
       "s3:PutObject",
+      "s3:GetObject",
+      "s3:List*"
+    ]
+    resources = [
+      "${aws_s3_bucket.rail_bucket.arn}/*",
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "rail_s3_bucket_read_only_access_iam_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
       "s3:GetObject"
     ]
     resources = [
-      "${aws_s3_bucket.rail_bucket.arn}",
+      "${aws_s3_bucket.rail_bucket.arn}/*",
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:List*"
+    ]
+    resources = [
+      "*",
     ]
   }
 }
@@ -119,4 +140,32 @@ resource "aws_iam_role_policy" "rail_s3_bucket_access_iam_role_policy" {
 resource "aws_s3_bucket" "rail_bucket" {
   bucket = "${var.s3_bucket_name}"
   acl = "private"
+}
+
+data "aws_iam_policy_document" "api_gateway_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["apigateway.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "api_gateway_execution_role" {
+  name = "rail-api-gateway-execution-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.api_gateway_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy" "rail_s3_bucket_read_only_access_iam_role_policy" {
+  name = "rail-s3-bucket-read-only-access"
+  role = "${aws_iam_role.api_gateway_execution_role.name}"
+  policy = "${data.aws_iam_policy_document.rail_s3_bucket_read_only_access_iam_policy_document.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "rail_api_gateway_coloudwatch_access" {
+  role       = "${aws_iam_role.api_gateway_execution_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
